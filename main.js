@@ -26,4 +26,6 @@ function update(viewer) {
 function updateGUI(viewer) {
   const gui = new GUI()
   gui.add(viewer.params, 'colorful', true).name('color').onChange(viewer.render)
+  gui.add(viewer.params, 'min', 0, 1, 0.01).name('min').onChange(viewer.render)
+  gui.add(viewer.params, 'max', 0, 1, 0.01).name('max').onChange(viewer.render)
 }

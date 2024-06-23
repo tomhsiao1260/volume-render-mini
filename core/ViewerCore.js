@@ -18,15 +18,9 @@ export default class ViewerCore {
 
     this.params = {}
 
-    this.params.segmentVisible = true
-    this.params.sliceVisible = true
-    this.params.labelVisible = true
-
-    this.params.sliceX = 0.5
-    this.params.sliceY = 0.5
-    this.params.sliceZ = 0.5
-
     this.params.colorful = true
+    this.params.min = 0
+    this.params.max = 1
 
     this.init()
   }
@@ -99,6 +93,8 @@ export default class ViewerCore {
     // this.renderer.render(this.scene, this.camera)
 
     this.volumePass.material.uniforms.colorful.value = this.params.colorful
+    this.volumePass.material.uniforms.clim.value.x = this.params.min
+    this.volumePass.material.uniforms.clim.value.y = this.params.max
 
     this.camera.updateMatrixWorld()
     this.volumePass.material.uniforms.projectionInverse.value.copy(this.camera.projectionMatrixInverse)
