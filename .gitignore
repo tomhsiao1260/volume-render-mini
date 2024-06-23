@@ -26,3 +26,5 @@ dist-ssr
 /public/*
 !/public/.gitkeep
 /env
+*.nrrd
+*.tif
