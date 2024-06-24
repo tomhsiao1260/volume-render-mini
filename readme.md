@@ -2,7 +2,7 @@
 
 Minimum version of volume rendering. You can use it as a templete and build stuff on top of it.
 
-# How to run
+## Preprocess
 
 Install python packages
 
@@ -12,7 +12,11 @@ pip install -r requirements.txt
  
 Generate `.nrrd` from `.tif` files.
 
-`INPUT_FOLDER` folder with lots of tifs (e.g. 00.tif, 01.tif, ... 15.tif)
+```bash
+python volume.py <INPUT_FOLDER> <OUTPUT_FOLDER> --start_coord 0 0 0 --chunk_size 128 128 128
+```
+
+`INPUT_FOLDER` folder with lots of tifs (e.g. 000.tif, 001.tif, ..., 127.tif)
 
 `OUTPUT_FOLDER` use `public` folder to save the result
 
@@ -22,9 +26,7 @@ Generate `.nrrd` from `.tif` files.
 
 `--png` flag if you want to use `.png` instead of `.tif`
 
-```bash
-python volume.py <INPUT_FOLDER> <OUTPUT_FOLDER> --start_coord 0 0 0 --chunk_size 128 128 128
-```
+## Run the app
 
 Install javascript packages
 
