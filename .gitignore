@@ -23,11 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 
+/env
+*.nrrd
+*.tif
+
 /public/*
 !/public/.gitkeep
 !/public/cube.py
 !/public/cube.nrrd
 
-/env
-*.nrrd
-*.tif
