@@ -2,7 +2,23 @@
 
 Minimum version of volume rendering. You can use it as a templete and build stuff on top of it.
 
-## Preprocess
+## Run the app
+
+Install javascript packages
+
+```bash
+npm install
+```
+
+Run the app
+
+```bash
+npm run dev
+```
+
+## Render your own data
+
+If you sucessfully run the app, you will see the rendering result of `cube.nrrd` which is generated from `cube.py` as a quick demo. Now, let's render your own data.
 
 Install python packages
 
@@ -26,17 +42,6 @@ python volume.py <INPUT_FOLDER> <OUTPUT_FOLDER> --start_coord 0 0 0 --chunk_size
 
 `--png` flag if you want to use `.png` instead of `.tif`
 
-## Run the app
+In `ViewerCore.js`, rename `cube.nrrd` to you own data `volume.nrrd` and run the app again, hopefully you can see the result, cheer!
 
-Install javascript packages
-
-```bash
-npm install
-```
-
-Run the app
-
-```bash
-npm run dev
-```
 

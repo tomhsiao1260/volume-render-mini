@@ -13,5 +13,5 @@ for i in range(z):
         for k in range(x):
             cube[i, j, k] = int(255 * (i+k+j) / (x+y+z-3))
 
-tifffile.imwrite('cube.png', cube)
-nrrd.write('cube.nrrd', cube)
+tifffile.imwrite('cube.png', cube.transpose(0, 1, 2))
+nrrd.write('cube.nrrd', cube.transpose(2, 1, 0))
