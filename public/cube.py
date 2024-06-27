@@ -2,9 +2,8 @@ import nrrd
 import tifffile
 import numpy as np
 
-z = 2
-y = 3
-x = 5
+z, y, x = 2, 3, 5
+# z, y, x = 500, 150, 300
 
 cube = np.zeros((z, y, x), dtype=np.uint8)
 
