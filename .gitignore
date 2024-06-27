@@ -25,6 +25,9 @@ dist-ssr
 
 /public/*
 !/public/.gitkeep
+!/public/cube.py
+!/public/cube.nrrd
+
 /env
 *.nrrd
 *.tif
