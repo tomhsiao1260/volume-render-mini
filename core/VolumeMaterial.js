@@ -46,7 +46,7 @@ export class VolumeMaterial extends ShaderMaterial {
         const vec4 specular_color = vec4(1.0, 1.0, 1.0, 1.0);
         const float shininess = 40.0;
 
-        vec4 cast_mip(vec3 start_loc, vec3 step, int nsteps, vec3 view_ray);
+        float cast_mip(vec3 start_loc, vec3 step, int nsteps, vec3 view_ray);
 
         vec4 apply_colormap(float val);
         vec4 add_lighting(float val, vec3 loc, vec3 step, vec3 view_ray);
@@ -110,7 +110,8 @@ export class VolumeMaterial extends ShaderMaterial {
               nsteps = int(thickness * size.x / relative_step_size + 0.5);
               if ( nsteps < 1 ) discard;
               vec3 step = sdfRayDirection * thickness / float(nsteps);
-              volumeColor = cast_mip(uv, step, nsteps, sdfRayDirection);
+              float max_val = cast_mip(uv, step, nsteps, sdfRayDirection);
+              volumeColor = apply_colormap(max_val);
             } else {
               // volume
               float v = texture(volumeTex, uv).r;
@@ -125,11 +126,13 @@ export class VolumeMaterial extends ShaderMaterial {
 
         vec4 apply_colormap(float val) {
           float v = (val - clim[0]) / (clim[1] - clim[0]);
-          return texture2D(cmdata, vec2(v, 0.5));
-          // return vec4(vec3(val), 1.0);
+          vec4 color = texture2D(cmdata, vec2(v, 0.5));
+          // vec4 color = vec4(vec3(v), 1.0);
+          if (v < 0.01) color.a = 0.0;
+          return color;
         }
 
-        vec4 cast_mip(vec3 start_loc, vec3 step, int nsteps, vec3 view_ray) {
+        float cast_mip(vec3 start_loc, vec3 step, int nsteps, vec3 view_ray) {
           float max_val = -1e6;
           int max_i = 100;
           vec3 loc = start_loc;
@@ -155,7 +158,7 @@ export class VolumeMaterial extends ShaderMaterial {
           }
 
           // Resolve final color
-          return apply_colormap(max_val);
+          return max_val;
         }
       `,
     })

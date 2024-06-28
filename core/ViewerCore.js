@@ -59,7 +59,7 @@ export default class ViewerCore {
   }
 
   async sdfTexGenerate() {
-    const volume = await new NRRDLoader().loadAsync('cube.nrrd')
+    const volume = await new NRRDLoader().loadAsync('pi.nrrd')
 
     const { xLength: w, yLength: h, zLength: d } = volume
 
