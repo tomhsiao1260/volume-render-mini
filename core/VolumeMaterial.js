@@ -17,6 +17,7 @@ export class VolumeMaterial extends ShaderMaterial {
         projectionInverse: { value: new Matrix4() },
         sdfTransformInverse: { value: new Matrix4() },
         colorful: { value: true },
+        volume: { value: true },
       },
 
       vertexShader: /* glsl */ `
@@ -35,6 +36,7 @@ export class VolumeMaterial extends ShaderMaterial {
         uniform vec2 clim;
         uniform vec3 size;
         uniform bool colorful;
+        uniform bool volume;
         uniform sampler3D volumeTex;
         uniform sampler2D cmdata;
         uniform mat4 projectionInverse;
@@ -104,16 +106,17 @@ export class VolumeMaterial extends ShaderMaterial {
             vec3 uv = (sdfTransformInverse * vec4(pn, 1.0)).xyz + vec3( 0.5 );
             vec4 volumeColor;
 
-            if (colorful) {
+            if (volume) {
               // volume
               float thickness = length(pf - pn);
               nsteps = int(thickness * size.x / relative_step_size + 0.5);
               if ( nsteps < 1 ) discard;
               vec3 step = sdfRayDirection * thickness / float(nsteps);
               float max_val = cast_mip(uv, step, nsteps, sdfRayDirection);
+              // volumeColor = vec4(vec3(max_val), 1.0);
               volumeColor = apply_colormap(max_val);
             } else {
-              // volume
+              // plane
               float v = texture(volumeTex, uv).r;
               volumeColor = vec4(v, v, v, 1.0);
             }
@@ -126,8 +129,14 @@ export class VolumeMaterial extends ShaderMaterial {
 
         vec4 apply_colormap(float val) {
           float v = (val - clim[0]) / (clim[1] - clim[0]);
-          vec4 color = texture2D(cmdata, vec2(v, 0.5));
-          // vec4 color = vec4(vec3(v), 1.0);
+
+          vec4 color;
+          if (colorful) {
+            color = texture2D(cmdata, vec2(v, 0.5));
+          } else {
+            color = vec4(vec3(v), 1.0);
+          }
+
           if (v < 0.01) color.a = 0.0;
           return color;
         }

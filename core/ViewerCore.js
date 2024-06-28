@@ -19,6 +19,7 @@ export default class ViewerCore {
     this.params = {}
 
     this.params.colorful = true
+    this.params.volume = true
     this.params.min = 0
     this.params.max = 1
 
@@ -32,7 +33,7 @@ export default class ViewerCore {
 
     // camera setup
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 50)
-    this.camera.position.copy(new THREE.Vector3(0, 0, -1).multiplyScalar(1.0))
+    this.camera.position.copy(new THREE.Vector3(0, 0, -1.5).multiplyScalar(1.0))
     this.camera.up.set(0, -1, 0)
     this.camera.far = 5
     this.camera.updateProjectionMatrix()
@@ -59,7 +60,7 @@ export default class ViewerCore {
   }
 
   async sdfTexGenerate() {
-    const volume = await new NRRDLoader().loadAsync('pi.nrrd')
+    const volume = await new NRRDLoader().loadAsync('cube.nrrd')
 
     const { xLength: w, yLength: h, zLength: d } = volume
 
@@ -93,6 +94,7 @@ export default class ViewerCore {
     // this.renderer.render(this.scene, this.camera)
 
     this.volumePass.material.uniforms.colorful.value = this.params.colorful
+    this.volumePass.material.uniforms.volume.value = this.params.volume
     this.volumePass.material.uniforms.clim.value.x = this.params.min
     this.volumePass.material.uniforms.clim.value.y = this.params.max
 

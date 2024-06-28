@@ -5,12 +5,14 @@ import numpy as np
 z, y, x = 2, 3, 5
 # z, y, x = 500, 150, 300
 
-cube = np.zeros((z, y, x), dtype=np.uint8)
+i = np.arange(z)[:, None, None]
+j = np.arange(y)[None, :, None]
+k = np.arange(x)[None, None, :]
 
-for i in range(z):
-    for j in range(y):
-        for k in range(x):
-            cube[i, j, k] = int(255 * (i+k+j) / (x+y+z-3))
+# z, y, x
+cube = (255 * (i + j + k) / (x + y + z - 3)).astype(np.uint8)
 
+# z, y, x
 tifffile.imwrite('cube.png', cube.transpose(0, 1, 2))
+# x, y, z
 nrrd.write('cube.nrrd', cube.transpose(2, 1, 0))
