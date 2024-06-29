@@ -118,7 +118,7 @@ export class VolumeMaterial extends THREE.ShaderMaterial {
             } else {
               // plane
               float v = texture(volumeTex, uv).r;
-              volumeColor = vec4(v, v, v, 1.0);
+              volumeColor = apply_colormap(v);
             }
 
             gl_FragColor = volumeColor; return;
@@ -129,6 +129,7 @@ export class VolumeMaterial extends THREE.ShaderMaterial {
 
         vec4 apply_colormap(float val) {
           float v = (val - clim[0]) / (clim[1] - clim[0]);
+          if (v < 0.0 || v > 1.0) v = 0.0;
 
           vec4 color;
           if (colorful) {
@@ -137,7 +138,7 @@ export class VolumeMaterial extends THREE.ShaderMaterial {
             color = vec4(vec3(v), 1.0);
           }
 
-          if (v < 0.01) color.a = 0.0;
+          if (v < 0.001) color.a = 0.0;
           return color;
         }
 
@@ -153,12 +154,11 @@ export class VolumeMaterial extends THREE.ShaderMaterial {
           // non-constant expression. So we use a hard-coded max, and an additional condition
           // inside the loop.
           for (int iter=0; iter<MAX_STEPS; iter++) {
-            if (iter >= nsteps)
-              break;
+            if (iter >= nsteps) break;
             // Sample from the 3D texture
             float val = texture(volumeTex, loc).r;
             // Apply MIP operation
-            if (val > max_val) {
+            if (val > max_val && val > clim[0] && val < clim[1]) {
               max_val = val;
               max_i = iter;
             }
