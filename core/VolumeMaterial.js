@@ -1,6 +1,6 @@
-import { ShaderMaterial, Matrix4, Vector2, Vector3 } from 'three'
+import * as THREE from 'three'
 
-export class VolumeMaterial extends ShaderMaterial {
+export class VolumeMaterial extends THREE.ShaderMaterial {
   constructor(params) {
     super({
       defines: {
@@ -11,11 +11,11 @@ export class VolumeMaterial extends ShaderMaterial {
 
       uniforms: {
         cmdata: { value: null },
-        volumeTex: { value: null },
-        clim: { value: new Vector2(0.4, 1.0) },
-        size: { value: new Vector3() },
-        projectionInverse: { value: new Matrix4() },
-        sdfTransformInverse: { value: new Matrix4() },
+        volumeTex: { value: dataTextureInit() },
+        clim: { value: new THREE.Vector2(0.4, 1.0) },
+        size: { value: new THREE.Vector3() },
+        projectionInverse: { value: new THREE.Matrix4() },
+        sdfTransformInverse: { value: new THREE.Matrix4() },
         colorful: { value: true },
         volume: { value: true },
       },
@@ -173,3 +173,17 @@ export class VolumeMaterial extends ShaderMaterial {
     })
   }
 }
+
+function dataTextureInit() {
+  const texture = new THREE.Data3DTexture(new Uint8Array([0]), 1, 1, 1)
+  texture.format = THREE.RedFormat
+  texture.type = THREE.UnsignedByteType
+  texture.minFilter = THREE.NearestFilter
+  texture.magFilter = THREE.NearestFilter
+  texture.needsUpdate = true
+
+  return texture
+}
+
+
+
