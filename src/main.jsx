@@ -8,7 +8,7 @@ const root = ReactDOM.createRoot(document.querySelector('#root'))
 
 root.render(
     <StrictMode>
-        <Canvas>
+        <Canvas frameloop="demand">
             <App />
         </Canvas>
     </StrictMode>
