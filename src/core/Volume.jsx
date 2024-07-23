@@ -28,32 +28,29 @@ extend({ FullScreenMaterial });
 
 export default function Volume() {
   const fullScreenMaterialRef = useRef();
+
   const [loaded, setLoaded] = useState(false);
   const [inverseBoundsMatrix, setInverseBoundsMatrix] = useState(null);
 
+  const [colorful, setColorful] = useState(true);
+  const [volume, setVolume] = useState(true);
+  const [clim, setClim] = useState(new THREE.Vector2(0, 1));
+
   useControls(() => ({
     colorful: {
-      value: true,
-      onChange: (v) => {
-        fullScreenMaterialRef.current.colorful = v;
-        invalidate();
-      },
+      value: colorful,
+      onChange: setColorful,
     },
     volume: {
-      value: true,
-      onChange: (v) => {
-        fullScreenMaterialRef.current.volume = v;
-        invalidate();
-      },
+      value: colorful,
+      onChange: setVolume,
     },
     threshold: {
-      min: 0,
-      max: 1,
-      value: [0, 1],
+      min: clim.x,
+      max: clim.y,
+      value: clim.toArray(),
       onChange: (v) => {
-        fullScreenMaterialRef.current.min = v[0];
-        fullScreenMaterialRef.current.max = v[1];
-        invalidate();
+        setClim(new THREE.Vector2(v[0], v[1]));
       },
     },
   }));
@@ -124,7 +121,12 @@ export default function Volume() {
   return (
     <mesh>
       <planeGeometry args={[2, 2, 1, 1]} />
-      <fullScreenMaterial ref={fullScreenMaterialRef} />
+      <fullScreenMaterial
+        ref={fullScreenMaterialRef}
+        colorful={colorful}
+        volume={volume}
+        clim={clim}
+      />
     </mesh>
   );
 }
