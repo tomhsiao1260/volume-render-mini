@@ -14,7 +14,7 @@ const FullScreenMaterial = shaderMaterial(
     volume: true,
     colorful: true,
     size: new THREE.Vector3(),
-    clim: new THREE.Vector2(0.4, 1.0),
+    clim: new THREE.Vector2(0.0, 1.0),
     projectionInverse: new THREE.Matrix4(),
     transformInverse: new THREE.Matrix4(),
   },
@@ -28,42 +28,22 @@ extend({ FullScreenMaterial });
 
 export default function Volume() {
   const fullScreenMaterialRef = useRef();
-
   const [loaded, setLoaded] = useState(false);
   const [inverseBoundsMatrix, setInverseBoundsMatrix] = useState(null);
 
-  const [colorful, setColorful] = useState(true);
-  const [volume, setVolume] = useState(true);
-  const [clim, setClim] = useState(new THREE.Vector2(0, 1));
-
-  useControls(() => ({
-    colorful: {
-      value: colorful,
-      onChange: setColorful,
-    },
-    volume: {
-      value: colorful,
-      onChange: setVolume,
-    },
-    threshold: {
-      min: clim.x,
-      max: clim.y,
-      value: clim.toArray(),
-      onChange: (v) => {
-        setClim(new THREE.Vector2(v[0], v[1]));
-      },
-    },
-  }));
+  const { colorful, volume, clim } = useControls({
+    colorful: true,
+    volume: true,
+    clim: { min: 0, max: 1, value: [ 0, 1 ] },
+  });
 
   useEffect(() => {
-    if (!loaded) {
-      process();
-    }
+    if (!loaded) { process() }
 
     async function process() {
+      console.log("volume loading ...");
       const volume = await new NRRDLoader().loadAsync("cube.nrrd");
       const { xLength: w, yLength: h, zLength: d } = volume;
-      console.log("volume loading ...");
 
       const matrix = new THREE.Matrix4();
       const center = new THREE.Vector3();
@@ -84,19 +64,13 @@ export default function Volume() {
       volumeTex.magFilter = THREE.NearestFilter;
       volumeTex.needsUpdate = true;
 
+      const cmtextures = await new THREE.TextureLoader().loadAsync(textureViridis)
       fullScreenMaterialRef.current.size.set(w, h, d);
       fullScreenMaterialRef.current.volumeTex = volumeTex;
-
-      const cmtextures = {
-        viridis: new THREE.TextureLoader().load(textureViridis),
-      };
-      fullScreenMaterialRef.current.cmdata = cmtextures.viridis;
+      fullScreenMaterialRef.current.cmdata = cmtextures;
 
       setLoaded(true);
-
-      setTimeout(() => {
-        invalidate();
-      }, 500);
+      setTimeout(() => { invalidate() }, 500);
     }
   }, [loaded]);
 
@@ -123,9 +97,9 @@ export default function Volume() {
       <planeGeometry args={[2, 2, 1, 1]} />
       <fullScreenMaterial
         ref={fullScreenMaterialRef}
+        clim={[clim[0], clim[1]]}
         colorful={colorful}
         volume={volume}
-        clim={clim}
       />
     </mesh>
   );

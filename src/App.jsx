@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Volume from "./core/Volume";
-import { useControls } from "leva";
 
 export default function App() {
   const gl = {};
