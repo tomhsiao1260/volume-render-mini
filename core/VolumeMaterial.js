@@ -158,7 +158,7 @@ export class VolumeMaterial extends THREE.ShaderMaterial {
             // Sample from the 3D texture
             float val = texture(volumeTex, loc).r;
             // Apply MIP operation
-            if (val > max_val && val > clim[0] && val < clim[1]) {
+            if (val > max_val && val > clim[0] && val < clim[1] + 1e3) {
               max_val = val;
               max_i = iter;
             }
