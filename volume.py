@@ -63,7 +63,7 @@ def pngs2nrrd(tiffdir, nrrddir, chunk_size, start_coord):
         png = Image.open(intpngs[index])
         png = np.array(png)
 
-        stack[layer, :, :] = png[y0:y0+cy, x0:x0+cx]
+        stack[layer - z0, :, :] = png[y0:y0+cy, x0:x0+cx]
 
     # debug
     filename = os.path.join(nrrddir, 'volume.png')
@@ -95,7 +95,7 @@ def tifs2nrrd(tiffdir, nrrddir, chunk_size, start_coord):
         if tiff.dtype == np.uint16:
             tiff = (tiff / 256).astype(np.uint8)
 
-        stack[layer, :, :] = tiff[y0:y0+cy, x0:x0+cx]
+        stack[layer - z0, :, :] = tiff[y0:y0+cy, x0:x0+cx]
 
     # debug
     filename = os.path.join(nrrddir, 'volume.png')

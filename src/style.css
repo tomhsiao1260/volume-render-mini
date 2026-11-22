@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  overflow: hidden;
+  background: #000;
+}
+
+.webgl {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#status {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  color: #ccc;
+  font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
